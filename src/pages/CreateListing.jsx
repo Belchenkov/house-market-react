@@ -117,7 +117,7 @@ const CreateListing = () => {
         } else {
             geolocation.lat = latitude;
             geolocation.lng = longitude;
-            location = address;
+            //location = address;
         }
 
         // Store images
@@ -173,6 +173,7 @@ const CreateListing = () => {
             timestamp: serverTimestamp(),
         };
 
+        formDataCopy.location = address;
         delete formDataCopy.images;
         delete formDataCopy.address;
         location && (formDataCopy.location = location);
