@@ -9,6 +9,11 @@ import {
 } from 'firebase/storage';
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
+import {
+    addDoc,
+    collection,
+    serverTimestamp,
+} from 'firebase/firestore';
 
 import Spinner from '../components/Spinner';
 import { db } from '../firebase.config';
@@ -161,9 +166,25 @@ const CreateListing = () => {
             return;
         })
 
-        console.log(imgUrls)
+        const formDataCopy = {
+            ...formData,
+            imgUrls,
+            geolocation,
+            timestamp: serverTimestamp(),
+        };
+
+        delete formDataCopy.images;
+        delete formDataCopy.address;
+        location && (formDataCopy.location = location);
+
+        !formDataCopy.offer && delete formDataCopy.discountedPrice;
+
+        const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
 
         setLoading(false);
+        toast.success('Listing Saved!');
+
+        navigate(`/category/${formDataCopy.type}/${docRef.id}`);
     };
 
     const onMutate = e => {
