@@ -16,7 +16,7 @@ import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
 
-const Offers = () => {
+const Category = () => {
     const [listings, setListings] = useState(null);
     const [loading, setLoading] = useState(false);
     const params = useParams();
@@ -29,7 +29,7 @@ const Offers = () => {
                 const listingsRef = collection(db, 'listings');
                 const q = query(
                     listingsRef,
-                    where('offer', '==', true),
+                    where('type', '==', params.categoryName),
                     orderBy('timestamp', 'desc'),
                     limit(10)
                 );
@@ -54,12 +54,14 @@ const Offers = () => {
         }
 
         fetchListings();
-    }, [])
+    }, [params.categoryName])
 
     return (
         <div className='category'>
             <header>
-                <p className="pageHeader">Offers</p>
+                <p className="pageHeader">
+                    { params.categoryName === 'rent' ? 'Places for rent' : 'Places for sale' }
+                </p>
             </header>
 
             { loading
@@ -77,11 +79,11 @@ const Offers = () => {
                                 ))}
                             </ul>
                         </main>
-                    </>)
-                    : <p>There are no current offers</p>
+                       </>)
+                    : <p>No listings for {params.categoryName}</p>
             }
         </div>
     );
 };
 
-export default Offers;
+export default Category;
