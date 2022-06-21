@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
     collection,
     getDocs,
@@ -7,7 +6,6 @@ import {
     orderBy,
     limit,
     startAfter,
-    getDoc,
     where,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -19,7 +17,6 @@ import ListingItem from "../components/ListingItem";
 const Offers = () => {
     const [listings, setListings] = useState(null);
     const [loading, setLoading] = useState(false);
-    const params = useParams();
     const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
     useEffect(() => {
